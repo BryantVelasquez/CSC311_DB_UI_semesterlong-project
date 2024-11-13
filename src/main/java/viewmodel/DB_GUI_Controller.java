@@ -41,8 +41,16 @@ public class DB_GUI_Controller implements Initializable {
     private TableColumn<Person, Integer> tv_id;
     @FXML
     private TableColumn<Person, String> tv_fn, tv_ln, tv_department, tv_major, tv_email;
+
+    @FXML
+    private Button editButton, addButton, deleteButton, clearButton;
+
     private final DbConnectivityClass cnUtil = new DbConnectivityClass();
     private final ObservableList<Person> data = cnUtil.getData();
+
+
+
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -69,6 +77,7 @@ public class DB_GUI_Controller implements Initializable {
             p.setId(cnUtil.retrieveId(p));
             data.add(p);
             clearForm();
+
 
     }
 
@@ -133,6 +142,7 @@ public class DB_GUI_Controller implements Initializable {
         cnUtil.deleteRecord(p);
         data.remove(index);
         tv.getSelectionModel().select(index);
+
     }
 
     @FXML
@@ -146,17 +156,25 @@ public class DB_GUI_Controller implements Initializable {
     @FXML
     protected void addRecord() {
         showSomeone();
+        //add button, regex sequence to make sure theres at @email for it and for name
     }
 
     @FXML
     protected void selectedItemTV(MouseEvent mouseEvent) {
         Person p = tv.getSelectionModel().getSelectedItem();
-        first_name.setText(p.getFirstName());
-        last_name.setText(p.getLastName());
-        department.setText(p.getDepartment());
-        major.setText(p.getMajor());
-        email.setText(p.getEmail());
-        imageURL.setText(p.getImageURL());
+        if(p != null) {
+            editButton.setDisable(false);
+            deleteButton.setDisable(false);
+            first_name.setText(p.getFirstName());
+            last_name.setText(p.getLastName());
+            department.setText(p.getDepartment());
+            major.setText(p.getMajor());
+            email.setText(p.getEmail());
+            imageURL.setText(p.getImageURL());
+        }
+
+
+
     }
 
     public void lightTheme(ActionEvent actionEvent) {
