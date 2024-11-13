@@ -26,6 +26,8 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class DB_GUI_Controller implements Initializable {
 
@@ -44,6 +46,9 @@ public class DB_GUI_Controller implements Initializable {
 
     @FXML
     private Button editButton, addButton, deleteButton, clearButton;
+
+    private final String firstNameRegex = "^[A-Z][a-z]+";
+    private final String lastNameRegex = "^[A-Z][a-z]+";
 
     private final DbConnectivityClass cnUtil = new DbConnectivityClass();
     private final ObservableList<Person> data = cnUtil.getData();
@@ -65,6 +70,7 @@ public class DB_GUI_Controller implements Initializable {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+
     }
 
     @FXML
@@ -155,9 +161,25 @@ public class DB_GUI_Controller implements Initializable {
 
     @FXML
     protected void addRecord() {
-        showSomeone();
-        //add button, regex sequence to make sure theres at @email for it and for name
+        if(regex("^[A-Z][a-z]+", first_name.getText()) && regex("^[A-Z][a-z]+", last_name.getText()) && regex("^[A-Za-z0-9+_.-]+@(.+)$ ", email.getText())){
+            showSomeone();
+        }
     }
+
+    private boolean regex(String regex, String string){
+
+        final Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
+        final Matcher matcher = pattern.matcher(string);
+
+        if(matcher.find()){
+            return true;
+            } else{
+            return false;
+        }
+    }
+
+
+
 
     @FXML
     protected void selectedItemTV(MouseEvent mouseEvent) {
