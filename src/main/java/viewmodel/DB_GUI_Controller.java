@@ -75,7 +75,7 @@ public class DB_GUI_Controller implements Initializable {
 
     @FXML
     protected void addNewRecord() {
-
+        if(regex("^[A-Z][a-z]+", first_name.getText()) && regex("^[A-Z][a-z]+", last_name.getText()) && regex("([A-Za-z0-9]+)(@)([A-Za-z0-9]+)(.)([A-Za-z0-9]+)", email.getText())) {
             Person p = new Person(first_name.getText(), last_name.getText(), department.getText(),
                     major.getText(), email.getText(), imageURL.getText());
             cnUtil.insertUser(p);
@@ -83,7 +83,7 @@ public class DB_GUI_Controller implements Initializable {
             p.setId(cnUtil.retrieveId(p));
             data.add(p);
             clearForm();
-
+        }
 
     }
 
@@ -161,25 +161,18 @@ public class DB_GUI_Controller implements Initializable {
 
     @FXML
     protected void addRecord() {
-        if(regex("^[A-Z][a-z]+", first_name.getText()) && regex("^[A-Z][a-z]+", last_name.getText()) && regex("^[A-Za-z0-9+_.-]+@(.+)$ ", email.getText())){
             showSomeone();
         }
-    }
 
     private boolean regex(String regex, String string){
 
         final Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
         final Matcher matcher = pattern.matcher(string);
-
-        if(matcher.find()){
-            return true;
-            } else{
-            return false;
-        }
+        boolean match = false;
+        while(matcher.find()){
+            match = true;
+            } return match;
     }
-
-
-
 
     @FXML
     protected void selectedItemTV(MouseEvent mouseEvent) {
