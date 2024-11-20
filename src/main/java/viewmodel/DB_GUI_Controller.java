@@ -43,6 +43,9 @@ public class DB_GUI_Controller implements Initializable {
     ProgressBar progressBar;
     @FXML
     TextField first_name, last_name, department, major, email, imageURL;
+
+    @FXML
+    ComboBox<Major> majorComboBox;
     @FXML
     ImageView img_view;
     @FXML
@@ -70,6 +73,8 @@ public class DB_GUI_Controller implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
+            //Populates the combobox with the Major enum values
+            majorComboBox.setItems(FXCollections.observableArrayList(Major.values()));
             tv_id.setCellValueFactory(new PropertyValueFactory<>("id"));
             tv_fn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
             tv_ln.setCellValueFactory(new PropertyValueFactory<>("lastName"));
@@ -85,16 +90,31 @@ public class DB_GUI_Controller implements Initializable {
 
     @FXML
     protected void addNewRecord() {
-        if(regex("^[A-Z][a-z]+", first_name.getText()) && regex("^[A-Z][a-z]+", last_name.getText()) && regex("([A-Za-z0-9]+)(@)([A-Za-z0-9]+)(.)([A-Za-z0-9]+)", email.getText())) {
-            Person p = new Person(first_name.getText(), last_name.getText(), department.getText(),
-                    major.getText(), email.getText(), imageURL.getText());
-            cnUtil.insertUser(p);
-            cnUtil.retrieveId(p);
-            p.setId(cnUtil.retrieveId(p));
-            data.add(p);
-            clearForm();
-        }
+        if (regex("^[A-Z][a-z]+", first_name.getText()) &&
+                regex("^[A-Z][a-z]+", last_name.getText()) &&
+                regex("([A-Za-z0-9]+)(@)([A-Za-z0-9]+)(.)([A-Za-z0-9]+)", email.getText())) {
 
+            Major selectedMajor = majorComboBox.getValue(); // Get selected value from ComboBox
+
+            if (selectedMajor != null) {
+                Person p = new Person(
+                        first_name.getText(),
+                        last_name.getText(),
+                        department.getText(),
+                        selectedMajor.toString(), // Convert Major to String
+                        email.getText(),
+                        imageURL.getText()
+                );
+
+                cnUtil.insertUser(p);
+                cnUtil.retrieveId(p);
+                p.setId(cnUtil.retrieveId(p));
+                data.add(p);
+                clearForm();
+            } else {
+                System.out.println("Please select a Major.");
+            }
+        }
     }
 
     @FXML
@@ -105,6 +125,7 @@ public class DB_GUI_Controller implements Initializable {
         major.setText("");
         email.setText("");
         imageURL.setText("");
+        majorComboBox.getSelectionModel().clearSelection(); //clears the combobox selection
     }
 
     @FXML
@@ -191,7 +212,10 @@ public class DB_GUI_Controller implements Initializable {
 
     @FXML
     protected void showImage() {
-
+        if(progressBar == null){
+            System.out.println("ProgressBar is null. Check FXML linkage.");
+            return;
+        }
         File file = (new FileChooser()).showOpenDialog(img_view.getScene().getWindow());
         if (file != null) {
             img_view.setImage(new Image(file.toURI().toString()));
@@ -228,6 +252,14 @@ public class DB_GUI_Controller implements Initializable {
             major.setText(p.getMajor());
             email.setText(p.getEmail());
             imageURL.setText(p.getImageURL());
+
+            //sets the combobox to its correct value
+            try{
+                majorComboBox.setValue(Major.valueOf(p.getMajor()));
+            }catch (IllegalArgumentException e){
+                System.out.println("Invalid major value: " + p.getMajor());
+                majorComboBox.getSelectionModel().clearSelection();
+            }
         }
 
 
@@ -289,7 +321,11 @@ public class DB_GUI_Controller implements Initializable {
         });
     }
 
-    private static enum Major {Business, CSC, CPIS}
+    private static enum Major {
+        Business, CSC, CPIS, English, Biology //added new enum values :D
+    }
+
+
 
     private static class Results {
 
