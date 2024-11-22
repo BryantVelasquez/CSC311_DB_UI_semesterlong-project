@@ -4,7 +4,7 @@
     -fx-font-family: "Arial";
     -fx-font-size: 15px;
     -fx-text-alignment: center;
-    -fx-text-fill: #000000;
+    -fx-text-fill: #fefefe;
     -fx-alignment: CENTER;
     -fx-background-radius: 10;
     -fx-pref-width:200px;
@@ -12,13 +12,13 @@
 }
 
 .left_pane {
-    -fx-background-color: #a73;
+    -fx-background-color: #1128e6;
     -fx-pref-width: 130px;
     -fx-pref-height: 600px;
 }
 
 .admin_section {
-    -fx-background-color: #999;
+    -fx-background-color: #fefefe;
 }
 
 .table_columns {
@@ -26,13 +26,17 @@
     -fx-text-fill: black;
 }
 
+.menu_bar .label{
+    -fx-text-fill: white;
+}
 
 .menu_bar {
-    -fx-background-color: #841;
+    -fx-background-color: #1128e6;
+
 }
 
 .anchor_pane {
-    -fx-background-color: #a73;
+    -fx-background-color: #fefefe;
 }
 
 .text_field_pane {
@@ -41,7 +45,7 @@
 }
 
 .image_view{
-    -fx-background-color: yellow;
+    -fx-background-color: lightBlue;
     -fx-border-color: black;
     -fx-border-width: 2;
 }
