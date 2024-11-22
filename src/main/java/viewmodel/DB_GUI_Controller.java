@@ -45,6 +45,9 @@ public class DB_GUI_Controller implements Initializable {
     TextField first_name, last_name, department, major, email, imageURL;
 
     @FXML
+    private Label statusLabel;
+
+    @FXML
     ComboBox<Major> majorComboBox;
     @FXML
     ImageView img_view;
@@ -90,30 +93,38 @@ public class DB_GUI_Controller implements Initializable {
 
     @FXML
     protected void addNewRecord() {
-        if (regex("^[A-Z][a-z]+", first_name.getText()) &&
-                regex("^[A-Z][a-z]+", last_name.getText()) &&
+        if (regex(firstNameRegex, first_name.getText()) &&
+                regex(lastNameRegex, last_name.getText()) &&
                 regex("([A-Za-z0-9]+)(@)([A-Za-z0-9]+)(.)([A-Za-z0-9]+)", email.getText())) {
 
-            Major selectedMajor = majorComboBox.getValue(); // Get selected value from ComboBox
+            Major selectedMajor = majorComboBox.getValue();
 
             if (selectedMajor != null) {
                 Person p = new Person(
                         first_name.getText(),
                         last_name.getText(),
                         department.getText(),
-                        selectedMajor.toString(), // Convert Major to String
+                        selectedMajor.toString(),
                         email.getText(),
                         imageURL.getText()
                 );
 
-                cnUtil.insertUser(p);
-                cnUtil.retrieveId(p);
-                p.setId(cnUtil.retrieveId(p));
-                data.add(p);
-                clearForm();
+                try {
+                    cnUtil.insertUser(p);
+                    cnUtil.retrieveId(p);
+                    p.setId(cnUtil.retrieveId(p));
+                    data.add(p);
+                    clearForm();
+
+                    updateStatus("Record added successfully.");
+                } catch (Exception e) {
+                    updateStatus("Error adding record: " + e.getMessage());
+                }
             } else {
-                System.out.println("Please select a Major.");
+                updateStatus("Please select a Major.");
             }
+        } else {
+            updateStatus("Invalid input. Please check the fields.");
         }
     }
 
@@ -122,9 +133,10 @@ public class DB_GUI_Controller implements Initializable {
         first_name.setText("");
         last_name.setText("");
         department.setText("");
-        major.setText("");
+       // majorComboBox.setValue(Major.valueOf(""));
         email.setText("");
         imageURL.setText("");
+
         majorComboBox.getSelectionModel().clearSelection(); //clears the combobox selection
     }
 
@@ -163,22 +175,39 @@ public class DB_GUI_Controller implements Initializable {
     @FXML
     protected void editRecord() {
         Person p = tv.getSelectionModel().getSelectedItem();
-        int index = data.indexOf(p);
-        Person p2 = new Person(index + 1, first_name.getText(), last_name.getText(), department.getText(),
-                major.getText(), email.getText(),  imageURL.getText());
-        cnUtil.editUser(p.getId(), p2);
-        data.remove(p);
-        data.add(index, p2);
-        tv.getSelectionModel().select(index);
+        if (p != null) {
+            try {
+                int index = data.indexOf(p);
+                Person p2 = new Person(index + 1, first_name.getText(), last_name.getText(), department.getText(),
+                        majorComboBox.getValue() != null ? majorComboBox.getValue().toString() : major.getText(),
+                        email.getText(), imageURL.getText());
+                cnUtil.editUser(p.getId(), p2);
+                data.set(index, p2);
+
+                updateStatus("Record updated successfully.");
+            } catch (Exception e) {
+                updateStatus("Error updating record: " + e.getMessage());
+            }
+        } else {
+            updateStatus("No record selected to edit.");
+        }
+
     }
 
     @FXML
     protected void deleteRecord() {
         Person p = tv.getSelectionModel().getSelectedItem();
-        int index = data.indexOf(p);
-        cnUtil.deleteRecord(p);
-        data.remove(index);
-        tv.getSelectionModel().select(index);
+        if (p != null) {
+            try {
+                cnUtil.deleteRecord(p);
+                data.remove(p);
+                updateStatus("Record deleted successfully.");
+            } catch (Exception e) {
+                updateStatus("Error deleting record: " + e.getMessage());
+            }
+        } else {
+            updateStatus("No record selected to delete.");
+        }
 
     }
     private Task<Void> createUploadTask(File file, ProgressBar progressBar) {
@@ -249,7 +278,7 @@ public class DB_GUI_Controller implements Initializable {
             first_name.setText(p.getFirstName());
             last_name.setText(p.getLastName());
             department.setText(p.getDepartment());
-            major.setText(p.getMajor());
+            majorComboBox.setValue(Major.valueOf(p.getMajor()));
             email.setText(p.getEmail());
             imageURL.setText(p.getImageURL());
 
@@ -323,6 +352,10 @@ public class DB_GUI_Controller implements Initializable {
 
     private static enum Major {
         Business, CSC, CPIS, English, Biology //added new enum values :D
+    }
+
+    private void updateStatus(String message){
+        Platform.runLater(() -> statusLabel.setText(message));
     }
 
 
