@@ -11,9 +11,9 @@
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
    <children>
-      <ImageView fitHeight="316.0" fitWidth="459.0" pickOnBounds="true" preserveRatio="true"  >
+      <ImageView fitHeight="400.0" fitWidth="459.0" pickOnBounds="true" preserveRatio="true"  >
        <image>
-                <Image url="@../images/TravisFish.png" />
+                <Image url="@../images/TravisSplash.jpeg" />
        </image>
       </ImageView>
    </children>

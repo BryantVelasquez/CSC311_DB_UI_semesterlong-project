@@ -21,7 +21,7 @@
     <children>
         <BorderPane fx:id="borderPane" layoutX="-2.0" layoutY="-3.0" prefHeight="597.0" prefWidth="908.0">
             <top>
-                <MenuBar fx:id="menuBar" prefHeight="28.0" prefWidth="913.0" styleClass="menu_bar" BorderPane.alignment="CENTER">
+                <MenuBar fx:id="menuBar" prefHeight="28.0" prefWidth="913.0" style="-fx-background-color: #4682B4;" styleClass="menu_bar" BorderPane.alignment="CENTER">
                     <menus>
                         <Menu mnemonicParsing="false" styleClass="menu_options" text="File">
                             <items>
@@ -35,7 +35,7 @@
                      <items>
                         <MenuItem fx:id="editItem" mnemonicParsing="true" styleClass="menu_items" text="_Edit       Ctrl+E" />
                         <MenuItem fx:id="deleteItem" mnemonicParsing="true" styleClass="menu_items" text="_Delete        Ctrl+D" />
-                        <MenuItem fx:id="ClearItem" mnemonicParsing="false" styleClass="menu_items" text="Clea_r        Ctrl+R" />
+                        <MenuItem fx:id="ClearItem" mnemonicParsing="false" styleClass="menu_items" text="Clear        Ctrl+R" />
                         <MenuItem fx:id="CopyItem" mnemonicParsing="false" styleClass="menu_items" text="_Copy       Ctrl+C" />
                      </items>
                   </Menu>
@@ -60,9 +60,9 @@
                 </MenuBar>
             </top>
             <left>
-                <VBox prefHeight="540.0" prefWidth="132.0" style="-fx-background-color: #1128e6;" styleClass="left_pane" BorderPane.alignment="CENTER">
+                <VBox prefHeight="540.0" prefWidth="132.0" style="-fx-background-color: #556B2F;" styleClass="left_pane" BorderPane.alignment="CENTER">
                     <children>
-                        <AnchorPane prefHeight="215.0" prefWidth="88.0" style="-fx-background-color: #1128e6;">
+                        <AnchorPane prefHeight="215.0" prefWidth="88.0" style="-fx-background-color: #556B2F;">
                             <children>
                                 <ImageView fx:id="img_view" fitHeight="111.0" fitWidth="122.0" layoutX="10.0" layoutY="11.0" onMouseClicked="#showImage" pickOnBounds="true" preserveRatio="true" styleClass="image_view">
                                     <image>
@@ -86,7 +86,7 @@
                 </HBox>
             </bottom>
          <right>
-                <VBox prefHeight="540.0" prefWidth="202.0" style="-fx-background-color: #1128e6;" styleClass="text_field_pane" BorderPane.alignment="CENTER">
+                <VBox prefHeight="540.0" prefWidth="202.0" style="-fx-background-color: #556B2F;" styleClass="text_field_pane" BorderPane.alignment="CENTER">
                     <children>
                         <TextField fx:id="first_name" promptText="First Name" styleClass="text_field">
                             <VBox.margin>
@@ -103,7 +103,7 @@
                                 <Insets left="10.0" right="10.0" top="5.0" />
                             </VBox.margin>
                         </TextField>
-                        <ComboBox fx:id="majorComboBox" prefWidth="150.0" promptText="Select_Major" styleClass="combo_box">
+                        <ComboBox fx:id="majorComboBox" prefHeight="27.0" prefWidth="213.0" promptText="Select Your Major:" styleClass="combo_box">
                             <VBox.margin>
                                 <Insets left="10.0" right="10.0" top="5.0" />
                             </VBox.margin>
@@ -123,22 +123,22 @@
                         <Insets bottom="40.0" right="20.0" top="40.0" />
                      </VBox.margin>
                   </Label>
-                        <Button fx:id="clearButton" minWidth="-Infinity" mnemonicParsing="false" onAction="#clearForm" style="-fx-background-color: ff0000;" styleClass="db_btn" text="Clear">
+                        <Button fx:id="clearButton" minWidth="-Infinity" mnemonicParsing="false" onAction="#clearForm" style="-fx-background-color: #FFD700;" styleClass="db_btn" text="Clear">
                             <VBox.margin>
                                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                             </VBox.margin>
                         </Button>
-                        <Button fx:id="addBtn" mnemonicParsing="false" onAction="#addNewRecord" style="-fx-background-color: ff0000;" styleClass="db_btn" text="Add">
+                        <Button fx:id="addBtn" mnemonicParsing="false" onAction="#addNewRecord" style="-fx-background-color: #FFD700;" styleClass="db_btn" text="Add">
                             <VBox.margin>
                                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                             </VBox.margin>
                         </Button>
-                        <Button fx:id="deleteButton" disable="true" mnemonicParsing="false" onAction="#deleteRecord" style="-fx-background-color: ff0000;" styleClass="db_btn" text="Delete">
+                        <Button fx:id="deleteButton" disable="true" mnemonicParsing="false" onAction="#deleteRecord" style="-fx-background-color: #FFD700;" styleClass="db_btn" text="Delete">
                             <VBox.margin>
                                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                             </VBox.margin>
                         </Button>
-                        <Button fx:id="editButton" disable="true" mnemonicParsing="false" onAction="#editRecord" style="-fx-background-color: ff0000;" styleClass="db_btn" text="Edit">
+                        <Button fx:id="editButton" disable="true" mnemonicParsing="false" onAction="#editRecord" style="-fx-background-color: #FFD700;" styleClass="db_btn" text="Edit">
                             <VBox.margin>
                                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                             </VBox.margin>
@@ -147,7 +147,7 @@
                 </VBox>
          </right>
          <center>
-                <TableView fx:id="tv" onMouseClicked="#selectedItemTV" prefHeight="539.0" prefWidth="566.0" styleClass="table_view" BorderPane.alignment="CENTER">
+                <TableView fx:id="tv" onMouseClicked="#selectedItemTV" prefHeight="539.0" prefWidth="566.0" style="-fx-background-color: #D2B48C;" styleClass="table_view" BorderPane.alignment="CENTER">
                     <columns>
                         <TableColumn fx:id="tv_id" prefWidth="42.0" styleClass="table_columns" text="ID" />
                         <TableColumn fx:id="tv_fn" prefWidth="117.0" styleClass="table_columns" text="First Name" />

@@ -22,16 +22,8 @@ public class LoginController {
     private GridPane rootpane;
     public void initialize() {
         rootpane.setBackground(new Background(
-                        createImage("https://edencoding.com/wp-content/uploads/2021/03/layer_06_1920x1080.png"),
-                        null,
-                        null,
-                        null,
-                        null,
-                        null
-                )
-        );
-
-
+                createImage(getClass().getResource("/images/TravisConcertImage.jpg").toString())
+        ));
         rootpane.setOpacity(0);
         FadeTransition fadeOut2 = new FadeTransition(Duration.seconds(10), rootpane);
         fadeOut2.setFromValue(0);
