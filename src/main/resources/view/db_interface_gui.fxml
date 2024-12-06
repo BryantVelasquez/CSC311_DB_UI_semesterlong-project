@@ -53,7 +53,8 @@
                         </Menu>
                   <Menu mnemonicParsing="false" text="CSV IMPORT/EXPORT">
                     <items>
-                      <MenuItem mnemonicParsing="false" text="Action 1" />
+                      <MenuItem fx:id="importCSV" mnemonicParsing="false" onAction="#importCSV" text="ImportCSV" />
+                        <MenuItem fx:id="exportCSV" mnemonicParsing="false" onAction="#exportCSV" text="Export CSV" />
                     </items>
                   </Menu>
                     </menus>

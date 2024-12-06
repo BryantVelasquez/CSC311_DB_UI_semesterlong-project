@@ -3,6 +3,7 @@ package viewmodel;
 import com.azure.storage.blob.BlobClient;
 import dao.DbConnectivityClass;
 //import dao.StorageUploader;
+import dao.StorageUploader;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -24,20 +25,19 @@ import javafx.stage.Stage;
 import model.Person;
 import service.MyLogger;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.URL;
 import java.nio.file.Files;
 import java.time.LocalDate;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class DB_GUI_Controller implements Initializable {
 
-   // StorageUploader store = new StorageUploader();
+    StorageUploader store = new StorageUploader();
 
     @FXML
     ProgressBar progressBar;
@@ -210,47 +210,44 @@ public class DB_GUI_Controller implements Initializable {
         }
 
     }
-//    private Task<Void> createUploadTask(File file, ProgressBar progressBar) {
-//        return new Task<>() {
-//            @Override
-//            protected Void call() throws Exception {
-//                BlobClient blobClient = store.getContainerClient().getBlobClient(file.getName());
-//                long fileSize = Files.size(file.toPath());
-//                long uploadedBytes = 0;
-//
-//                try (FileInputStream fileInputStream = new FileInputStream(file);
-//                     OutputStream blobOutputStream = blobClient.getBlockBlobClient().getBlobOutputStream()) {
-//
-//                    byte[] buffer = new byte[1024 * 1024]; // 1 MB buffer size
-//                    int bytesRead;
-//
-//                    while ((bytesRead = fileInputStream.read(buffer)) != -1) {
-//                        blobOutputStream.write(buffer, 0, bytesRead);
-//                        uploadedBytes += bytesRead;
-//
-//                        // Calculate and update progress as a percentage
-//                        int progress = (int) ((double) uploadedBytes / fileSize * 100);
-//                        updateProgress(progress, 100);
-//                    }
-//                }
-//
-//                return null;
-//            }
-//        };
-//    }
+    private Task<Void> createUploadTask(File file, ProgressBar progressBar) {
+        return new Task<>() {
+            @Override
+            protected Void call() throws Exception {
+                BlobClient blobClient = store.getContainerClient().getBlobClient(file.getName());
+                long fileSize = Files.size(file.toPath());
+                long uploadedBytes = 0;
+
+                try (FileInputStream fileInputStream = new FileInputStream(file);
+                     OutputStream blobOutputStream = blobClient.getBlockBlobClient().getBlobOutputStream()) {
+
+                    byte[] buffer = new byte[1024 * 1024]; // 1 MB buffer size
+                    int bytesRead;
+
+                    while ((bytesRead = fileInputStream.read(buffer)) != -1) {
+                        blobOutputStream.write(buffer, 0, bytesRead);
+                        uploadedBytes += bytesRead;
+
+                        // Calculate and update progress as a percentage
+                        int progress = (int) ((double) uploadedBytes / fileSize * 100);
+                        updateProgress(progress, 100);
+                    }
+                }
+
+                return null;
+            }
+        };
+    }
 
     @FXML
     protected void showImage() {
-        if(progressBar == null){
-            System.out.println("ProgressBar is null. Check FXML linkage.");
-            return;
-        }
         File file = (new FileChooser()).showOpenDialog(img_view.getScene().getWindow());
         if (file != null) {
             img_view.setImage(new Image(file.toURI().toString()));
-           // Task<Void> uploadTask = createUploadTask(file, progressBar);
-            //progressBar.progressProperty().bind(uploadTask.progressProperty());
-            //new Thread(uploadTask).start();
+
+            Task<Void> uploadTask = createUploadTask(file, progressBar);
+            progressBar.progressProperty().bind(uploadTask.progressProperty());
+            new Thread(uploadTask).start();
         }
     }
 
@@ -372,5 +369,43 @@ public class DB_GUI_Controller implements Initializable {
             this.major = venue;
         }
     }
+
+    @FXML
+    protected void importCSV() throws FileNotFoundException{
+        System.out.println("importCSV");
+        File file = (new FileChooser()).showOpenDialog(img_view.getScene().getWindow());
+        Scanner sc = new Scanner(file);
+        sc.nextLine();
+        try{
+            while(sc.hasNextLine()){
+                String li = sc.nextLine();
+                if(!li.isEmpty()){
+                    String[] part = li.split(",");
+                    cnUtil.insertUser(new Person(part[0], part[1], part[2], part[3], part[4], ""));
+                }
+            }
+            updateStatus("CSV imported successfully");
+        } catch (Exception e) {
+            updateStatus("Error importing CSV");
+        }
+        sc.close();
+        tv.setItems(cnUtil.getData());
+    }
+
+    @FXML
+    protected void exportCSV() throws IOException {
+        System.out.println("Export CSV");
+        FileWriter fw = new FileWriter("src/main/resources/ExportCSVTest");
+        File file = new File("src/main/resources/ExportCSVTest");
+        file.createNewFile();
+
+        fw.write("FirstName,LastName,Department,Major,Email\n");
+        fw.write(cnUtil.stringAllUsers());
+
+        statusLabel.setText("Exported to " + file.getAbsolutePath());
+
+    }
+
+
 
 }
