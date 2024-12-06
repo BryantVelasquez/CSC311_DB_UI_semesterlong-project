@@ -1,18 +1,38 @@
 package viewmodel;
 
+import dao.DbConnectivityClass;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+
+
+
 public class SignUpController {
+    @FXML
+    private TextField UserNameTXT;
+    @FXML
+    private PasswordField passWordTXT;
+
+    private final DbConnectivityClass cnUtil = new DbConnectivityClass();
     public void createNewAccount(ActionEvent actionEvent) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setContentText("Info for the user. Message goes here");
-        alert.showAndWait();
+        boolean x = cnUtil.createStuff(UserNameTXT.getText(),passWordTXT.getText());
+        if (x == true) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setContentText("TADA IT WORKED");
+            alert.showAndWait();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setContentText("WOMP WOMP");
+            alert.showAndWait();
+        }
     }
 
     public void goBack(ActionEvent actionEvent) {
@@ -27,4 +47,6 @@ public class SignUpController {
             e.printStackTrace();
         }
     }
+
+
 }
