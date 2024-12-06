@@ -399,10 +399,13 @@ public class DB_GUI_Controller implements Initializable {
         File file = new File("src/main/resources/ExportCSVTest");
         file.createNewFile();
 
-        fw.write("FirstName,LastName,Department,Major,Email\n");
+        fw.write("firstname,lastname,department,major,email\n");
         fw.write(cnUtil.stringAllUsers());
 
         statusLabel.setText("Exported to " + file.getAbsolutePath());
+
+
+        fw.close();
 
     }
 
