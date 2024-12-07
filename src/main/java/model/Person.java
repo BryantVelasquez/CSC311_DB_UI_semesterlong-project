@@ -30,7 +30,7 @@ public class Person {
         this.email = email;
         this.imageURL = imageURL;
     }
-
+//
     public String getEmail() {
         return email;
     }
