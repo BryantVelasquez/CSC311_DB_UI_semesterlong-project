@@ -26,11 +26,11 @@ public class SignUpController {
         boolean x = cnUtil.createStuff(UserNameTXT.getText(),passWordTXT.getText());
         if (x == true) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setContentText("TADA IT WORKED");
+            alert.setContentText("Account Created");
             alert.showAndWait();
         } else {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setContentText("WOMP WOMP");
+            alert.setContentText("Account error! Account already exists!");
             alert.showAndWait();
         }
     }
